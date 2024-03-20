@@ -23,7 +23,7 @@
             {{movie.description}}
         </p>
 
-        <a href="#" class="btn btn-primary">Update</a>
+        <a href="{{ url_for('edit', id=movie.id) }}" class="btn btn-primary">Update</a>
         <a href="#" class="btn btn-danger">Delete</a>
 
       </div>
