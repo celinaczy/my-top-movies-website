@@ -46,9 +46,9 @@ class Movie(db.Model):
     title: Mapped[str] = mapped_column(String(250), nullable=False)
     year: Mapped[str] = mapped_column(String(250), nullable=False)
     description: Mapped[str] = mapped_column(String(500), nullable=False)
-    rating: Mapped[str] = mapped_column(Float, nullable=False)
-    ranking: Mapped[str] = mapped_column(Float, nullable=False)
-    review: Mapped[str] = mapped_column(String(250), nullable=False)
+    rating: Mapped[str] = mapped_column(Float)
+    ranking: Mapped[str] = mapped_column(Float)
+    review: Mapped[str] = mapped_column(String(250))
     img_url: Mapped[str] = mapped_column(String(250), nullable=False)
 
     # Optional: this will allow each book object to be identified by its title when printed.
@@ -147,10 +147,20 @@ def add_selected():
         "Authorization": f"Bearer {TMDB_API_KEY}"
     }
 
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers).json()
 
-    print(response.text)
-
+    print(response)
+    new_movie = Movie(
+        title=response["original_title"],
+        year=response['release_date'][:5],
+        rating=0,
+        ranking=0,
+        review="...",
+        description=response['overview'],
+        img_url='https://image.tmdb.org/t/p/w500/'+response['poster_path']
+    )
+    db.session.add(new_movie)
+    db.session.commit()
     return redirect(url_for('home'))
 
 
