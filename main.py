@@ -73,7 +73,7 @@ with app.app_context():
 #     db.session.add(new_movie)
 #     db.session.commit()
 
-# ---------------------CREATE FORM -----------------------------------------------------
+# ---------------------CREATE FORMS -----------------------------------------------------
 
 class MovieForm(FlaskForm):
     rating = FloatField('Your rating out of 10', validators=[DataRequired()])
@@ -81,7 +81,12 @@ class MovieForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
+class AddMovieForm(FlaskForm):
+    movie = StringField('Movie Title', validators=[DataRequired()])
+    submit = SubmitField('Submit')
 
+
+# ---------------------FUNCTIONS -----------------------------------------------------
 
 @app.route("/")
 def home():
@@ -109,6 +114,13 @@ def delete():
     db.session.delete(movie_to_edit)
     db.session.commit()
     return redirect(url_for('home'))
+
+@app.route("/add", methods=['GET', 'POST'])
+def add():
+    form = AddMovieForm()
+    if form.validate_on_submit():
+        return redirect(url_for('home'))
+    return render_template('add.html', form=form)
 
 if __name__ == '__main__':
     app.run(debug=True)
