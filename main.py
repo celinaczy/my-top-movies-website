@@ -89,16 +89,17 @@ def home():
     all_movies = result.scalars()
     return render_template("index.html", movies=all_movies)
 
-@app.route("/edit")
+@app.route("/edit", methods=['GET', 'POST'])
 def edit():
-    movie_id = request.args.get('id')
     form = MovieForm()
-
-    # movie_to_edit = db.get_or_404(Movie, movie_id)
-    # if request.method == 'POST':
-    #     movie_to_edit.rating = request.form['rating']
-    #     db.session.commit()
-    #     return redirect(url_for('home'))
+    if form.validate_on_submit():
+        movie_id = request.args.get('id')
+        movie_to_edit = db.get_or_404(Movie, movie_id)
+        if request.method == 'POST':
+            movie_to_edit.rating = request.form['rating']
+            movie_to_edit.review = request.form['review']
+            db.session.commit()
+        return redirect(url_for('home'))
     return render_template('edit.html', form=form)
 
 
