@@ -136,5 +136,23 @@ def add():
         return render_template('select.html', results=response.json()['results'])
     return render_template('add.html', form=form)
 
+@app.route("/add_selected", methods=['GET', 'POST'])
+def add_selected():
+    movie_id = request.args.get('id')
+    TMDB_API_KEY = os.environ['TMDB_API_KEY']
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}?language=en-US"
+
+    headers = {
+        "accept": "application/json",
+        "Authorization": f"Bearer {TMDB_API_KEY}"
+    }
+
+    response = requests.get(url, headers=headers)
+
+    print(response.text)
+
+    return redirect(url_for('home'))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
