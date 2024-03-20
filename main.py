@@ -7,6 +7,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, FloatField, SubmitField
 from wtforms.validators import DataRequired
 import requests
+import os
 
 '''
 Red underlines? Install the required packages first: 
@@ -118,8 +119,21 @@ def delete():
 @app.route("/add", methods=['GET', 'POST'])
 def add():
     form = AddMovieForm()
+
     if form.validate_on_submit():
-        return redirect(url_for('home'))
+        movie_title = request.form['movie']
+        url = f"https://api.themoviedb.org/3/search/movie?query={movie_title}&include_adult=false&language=en-US&page=1"
+
+        TMDB_API_KEY = os.environ['TMDB_API_KEY']
+        headers = {
+            "accept": "application/json",
+            "Authorization": f"Bearer {TMDB_API_KEY}"
+        }
+
+        response = requests.get(url, headers=headers)
+
+        print(response.json())
+        return render_template('select.html', results=response.json()['results'])
     return render_template('add.html', form=form)
 
 if __name__ == '__main__':
