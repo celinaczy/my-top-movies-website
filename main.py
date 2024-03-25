@@ -151,7 +151,7 @@ def add_selected():
     print(response)
     new_movie = Movie(
         title=response["original_title"],
-        year=response['release_date'][:5],
+        year=response['release_date'][:4],
         rating=0,
         ranking=0,
         review="...",
