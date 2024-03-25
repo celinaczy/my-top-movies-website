@@ -47,7 +47,7 @@ class Movie(db.Model):
     year: Mapped[str] = mapped_column(String(250), nullable=False)
     description: Mapped[str] = mapped_column(String(500), nullable=False)
     rating: Mapped[str] = mapped_column(Float)
-    ranking: Mapped[str] = mapped_column(Float)
+    ranking: Mapped[str] = mapped_column(Integer)
     review: Mapped[str] = mapped_column(String(250))
     img_url: Mapped[str] = mapped_column(String(250), nullable=False)
 
@@ -91,8 +91,11 @@ class AddMovieForm(FlaskForm):
 
 @app.route("/")
 def home():
-    result = db.session.execute(db.select(Movie).order_by(desc(Movie.rating))).scalars()
-    return render_template("index.html", movies=result)
+    all_movies = db.session.execute(db.select(Movie).order_by(desc(Movie.rating))).scalars().all()
+    for i in range(len(all_movies)):
+        all_movies[i].ranking = i + 1
+    db.session.commit()
+    return render_template("index.html", movies=all_movies)
 
 @app.route("/edit", methods=['GET', 'POST'])
 def edit():
