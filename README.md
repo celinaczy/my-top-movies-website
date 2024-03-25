@@ -23,14 +23,15 @@ You can install the required packages using the following command:
 
 ```bash
 pip install -r requirements.txt
-Setup
+
+```
+## Setup
 Clone the repository:
-bash
-Copy code
+```bash
 git clone https://github.com/yourusername/movie-rating-app.git
+````
 Navigate to the project directory:
-bash
-Copy code
+```bash
 cd movie-rating-app
 ```
 
