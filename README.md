@@ -23,7 +23,6 @@ You can install the required packages using the following command:
 
 ```bash
 pip install -r requirements.txt
-
 ```
 ## Setup
 Clone the repository:
